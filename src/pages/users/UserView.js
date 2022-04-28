@@ -28,7 +28,7 @@ export default function UsersView() {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to="/">Users</Link>
+                    <Link to="/home">Users</Link>
                   </li>
                   <li className="breadcrumb-item active">View</li>
                 </ol>

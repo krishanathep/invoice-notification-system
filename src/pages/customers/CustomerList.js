@@ -172,12 +172,12 @@ export default function CustomerList() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Cusermers List</h1>
+                <h1>Customers List</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to="/">Dashboard</Link>
+                    <Link to="/home">Dashboard</Link>
                   </li>
                   <li className="breadcrumb-item active">Customers</li>
                 </ol>

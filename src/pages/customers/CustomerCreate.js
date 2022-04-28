@@ -14,7 +14,7 @@ export default function CustomerCreate() {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to="/">Customer</Link>
+                    <Link to="/home">Customer</Link>
                   </li>
                   <li className="breadcrumb-item active">Create</li>
                 </ol>

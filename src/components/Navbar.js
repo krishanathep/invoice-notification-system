@@ -2,6 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  function signOut() {
+    window.confirm("Are your sure you want to Signout?");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  }
+
   return (
     <div>
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -18,16 +25,15 @@ function Navbar() {
           </li>
         </ul>
         <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            <Link
-              className="nav-link"
-              data-widget="control-sidebar"
-              data-slide="true"
-              to="#"
-              role="button"
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link"
+              data-toggle="dropdown"
+              href="#"
+              onClick={signOut}
             >
-              <i className="fas fa-th-large" />
-            </Link>
+              <i class="fas fa-sign-out-alt"></i> Sing Out
+            </a>
           </li>
         </ul>
       </nav>

@@ -10,6 +10,7 @@ import {
   Legend,
   LineChart,
   Line,
+  ResponsiveContainer,
 } from "recharts";
 
 export default function AllReport() {
@@ -69,7 +70,7 @@ export default function AllReport() {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to="/">Dashboard</Link>
+                    <Link to="/home">Dashboard</Link>
                   </li>
                   <li className="breadcrumb-item active">Report</li>
                 </ol>
@@ -103,6 +104,7 @@ export default function AllReport() {
                   </div>
                 </div>
                 <div className="card-body">
+                <ResponsiveContainer width="100%" height={300}>
                   <BarChart width={1000} height={300} data={data}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
@@ -112,6 +114,7 @@ export default function AllReport() {
                     <Bar dataKey="pv" fill="#8884d8" />
                     <Bar dataKey="uv" fill="#82ca9d" />
                   </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
@@ -139,6 +142,7 @@ export default function AllReport() {
                   </div>
                 </div>
                 <div className="card-body">
+                <ResponsiveContainer width="100%" height={300}>
                   <LineChart
                     width={1000}
                     height={300}
@@ -163,6 +167,7 @@ export default function AllReport() {
                     />
                     <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
                   </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>

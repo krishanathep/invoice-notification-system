@@ -200,7 +200,7 @@ export default function InvoiceList() {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to="/">Dashboard</Link>
+                    <Link to="/home">Dashboard</Link>
                   </li>
                   <li className="breadcrumb-item active">Invoice</li>
                 </ol>

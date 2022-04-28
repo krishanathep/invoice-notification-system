@@ -10,6 +10,7 @@ import {
   Legend,
   LineChart,
   Line,
+  ResponsiveContainer,
 } from "recharts";
 
 export default function Home() {
@@ -77,7 +78,7 @@ export default function Home() {
         </section>
         <section className="content">
           <div className="row">
-            <div class="col-lg-3 col-6">
+            {/* <div class="col-lg-3 col-6">
               <div class="small-box bg-primary">
                 <div class="inner">
                   <h3>150</h3>
@@ -132,6 +133,53 @@ export default function Home() {
                   More info <i class="fas fa-arrow-circle-right"></i>
                 </Link>
               </div>
+            </div> */}
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-info">
+                  <i class="far fa-copy"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Invoice</span>
+                  <span class="info-box-number">1,410</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-success">
+                  <i class="fas fa-shopping-basket"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Customers</span>
+                  <span class="info-box-number">410</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-primary">
+                  <i class="fa fa-users"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Users</span>
+                  <span class="info-box-number">648</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-danger">
+                  <i class="fas fa-exclamation-circle"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Notification</span>
+                  <span class="info-box-number">139</span>
+                </div>
+              </div>
             </div>
             <div className="col-md-6">
               <div className="card">
@@ -157,15 +205,17 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="card-body">
-                  <BarChart width={500} height={250} data={data}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="pv" fill="#8884d8" />
-                    <Bar dataKey="uv" fill="#82ca9d" />
-                  </BarChart>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart width={500} height={250} data={data}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="pv" fill="#8884d8" />
+                      <Bar dataKey="uv" fill="#82ca9d" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
@@ -193,30 +243,32 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="card-body">
-                  <LineChart
-                    width={500}
-                    height={250}
-                    data={data}
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="pv"
-                      stroke="#8884d8"
-                      activeDot={{ r: 8 }}
-                    />
-                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-                  </LineChart>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart
+                      width={500}
+                      height={250}
+                      data={data}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="pv"
+                        stroke="#8884d8"
+                        activeDot={{ r: 8 }}
+                      />
+                      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>

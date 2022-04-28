@@ -4,17 +4,22 @@ import Moment from "react-moment";
 import "moment-timezone";
 
 export default function InvoiceView() {
-  const {id} = useParams();
+  const { id } = useParams();
 
-//   const getData = async () => {
-//     await fetch("http://127.0.0.1:8000/api/problems/" + id)
-//       .then((res) => res.json())
-//       .then((res) => setProblem(res.problem));
-//   };
+  //   const getData = async () => {
+  //     await fetch("http://127.0.0.1:8000/api/problems/" + id)
+  //       .then((res) => res.json())
+  //       .then((res) => setProblem(res.problem));
+  //   };
 
-//   useEffect(() => {
-//     getData(id);
-//   }, []);
+  //   useEffect(() => {
+  //     getData(id);
+  //   }, []);
+  const invoice = "Test invoice"
+
+  const customer = "Test customer";
+    
+  const company = "Test company"
 
   return (
     <>
@@ -23,12 +28,12 @@ export default function InvoiceView() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>View Users</h1>
+                <h1>Invoice View</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to="/">Users</Link>
+                    <Link to="/home">Dashboard</Link>
                   </li>
                   <li className="breadcrumb-item active">View</li>
                 </ol>
@@ -41,7 +46,7 @@ export default function InvoiceView() {
             <div className="col-md-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">View Users</h3>
+                  <h3 className="card-title">Invoice</h3>
                   <div className="card-tools">
                     <button
                       type="button"

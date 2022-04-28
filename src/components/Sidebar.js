@@ -73,16 +73,16 @@ export default function Sidebar() {
               </li>
               <li className="nav-item">
                 <Link to="/report" className="nav-link">
-                  <i className="nav-icon fas fa-chart-pie" />
+                  <i className="nav-icon fas fa-chart-area" />
                   <p>Report</p>
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a href="#" className="nav-link" onClick={signOut}>
                   <i className="nav-icon fas fa-sign-out-alt" />
                   <p>Sign out</p>
                 </a>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </div>
