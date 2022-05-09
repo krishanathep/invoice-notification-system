@@ -25,6 +25,10 @@ import CustomerEdit from './pages/customers/CustomerEdit'
 import UserList from "./pages/users/UsersList";
 import UserView from './pages/users/UserView'
 
+import TableExample from './pages/TableExaple'
+
+import InboxList from './pages/inbox/InboxList'
+
 function App() {
   return (
     <div className="wrapper">
@@ -41,6 +45,8 @@ function App() {
           <Route exact path="/invoice/view/:id" element={<InvoiceView />} />
           <Route exact path="/invoice/edit/:id" element={<InvoiceEdit />} />
 
+          <Route exact path="/inbox/list" element={<InboxList />} />
+
           <Route exact path="/customers/list" element={<CustomerList />} />
           <Route exact path="/customers/create" element={<CustomerCreate />} />
           <Route exact path="/customers/view/:id" element={<CustomerView />} />
@@ -49,9 +55,11 @@ function App() {
           <Route exact path="/users/list" element={<UserList />} />
           <Route exact path="/users/view/:id" element={<UserView />} />
 
+          <Route exact path="/table" element={<TableExample />} />
+
           <Route path="/report" element={<AllReport/>} />
         </Routes>
-        {window.location.pathname !== '/' && <Footer/>}
+        {window.location.pathname !== '/signin' && <Footer/>}
       </Router>
     </div>
   );

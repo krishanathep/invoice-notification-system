@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link , useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SignIn() {
 
-  const history = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,8 +27,6 @@ export default function SignIn() {
           alert('ยินดีต้อนรับ')
           localStorage.setItem('access_token', res['access_token'])
           localStorage.setItem('user', JSON.stringify(res['user']))
-          // history("/home");
-          // window.location.reload();
           window.location.href = "/home"
         }else {
           alert('ข้อมูลไม่ถูกต้อง')

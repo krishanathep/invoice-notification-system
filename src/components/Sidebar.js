@@ -47,6 +47,7 @@ export default function Sidebar() {
               role="menu"
               data-accordion="false"
             >
+              <li class="nav-header">MENU</li>
               <li className="nav-item">
                 <Link to="/home" className="nav-link">
                   <i className="nav-icon fas fa-tachometer-alt" />
@@ -60,17 +61,29 @@ export default function Sidebar() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link to="/inbox/list" className="nav-link">
+                  <i className="nav-icon far fa-envelope" />
+                  <p>Inbox</p>
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link to="/customers/list" className="nav-link">
                   <i className="nav-icon fas fa-shopping-basket" />
                   <p>Customers</p>
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
+                <Link to="/table" className="nav-link">
+                  <i className="nav-icon fas fa-table" />
+                  <p>TableExam</p>
+                </Link>
+              </li> */}
+              {/* <li className="nav-item">
                 <Link to="/users/list" className="nav-link">
                   <i className="nav-icon fas fa-users" />
                   <p>Users</p>
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link to="/report" className="nav-link">
                   <i className="nav-icon fas fa-chart-area" />

@@ -1,128 +1,52 @@
-import React, {Fragment} from "react";
+import React, {useState,useEffect,Fragment} from "react";
 import { Link } from "react-router-dom";
 import ReactDatatable from "@ashvin27/react-datatable";
 import Moment from "react-moment";
 import "moment-timezone";
 
 export default function CustomerList() {
-  const customers = [
-    {
-      id: 1,
-      name: "Customer Name 1",
-      address: 'Customer Address 1',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 2,
-      name: "Customer Name 2",
-      address: 'Customer Address 2',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 3,
-      name: "Customer Name 3",
-      address: 'Customer Address 3',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 4,
-      name: "Customer Name 4",
-      address: 'Customer Address 4',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 5,
-      name: "Customer Name 5",
-      address: 'Customer Address 5',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 6,
-      name: "Customer Name 6",
-      address: 'Customer Address 6',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 7,
-      name: "Customer Name 7",
-      address: 'Customer Address 7',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 8,
-      name: "Customer Name 8",
-      address: 'Customer Address 8',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 9,
-      name: "Customer Name 9",
-      address: 'Customer Address 9',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-    {
-      id: 10,
-      name: "Customer Name 10",
-      address: 'Customer Address 10',
-      fax: "9053715135",
-      phone: "0873243957",
-      mobile: "0873243929",
-      email: 'customer@gmail.com'
-    },
-  ]
+  
+  const [customers,setCustomers]=useState([])
+
+  function getData() {
+    fetch('http://127.0.0.1:8000/api/customers')
+      .then((res)=>res.json())
+      .then((res)=>setCustomers(res.customers))
+  }
+
+  useEffect(()=>{
+    getData()
+  },[])
 
   const columns = [
     {
-      key: "id",
-      text: "ID",
+      key: "mcustno",
+      text: "Cus No",
     },
     {
-      key: "name",
+      key: "mcustname",
       text: "Customer",
       align: "center",
     },
     {
-      key: "address",
+      key: "maddress1",
       text: "Address",
       align: "center",
     },
     {
-      key: 'fax',
+      key: 'mfax',
       text:'Fax'
     },
+    // {
+    //   key: 'mtel',
+    //   text: 'Phone'
+    // },
     {
-      key: 'phone',
-      text: 'Phone'
+      key: 'mmobile',
+      text: 'Mobile'
     },
     {
-      key: "email",
+      key: "memail",
       text: "Email",
       align: "center",
     },
@@ -153,13 +77,13 @@ export default function CustomerList() {
             >
               <i class="fas fa-edit"></i>
             </Link>{" "} 
-            <button
+            {/* <button
               // onClick={(event) => deleteStudnet(event, problems.id)}
               onClick={()=>window.confirm('Are your sure you want to Delete ?')}
               className="btn btn-danger btn-sm"
             >
               <i class="fas fa-trash"></i>
-            </button>
+            </button> */}
           </Fragment>
         );
       },
