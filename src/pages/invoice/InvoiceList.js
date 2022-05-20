@@ -1,196 +1,145 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ReactDatatable from "@ashvin27/react-datatable";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import Moment from "react-moment";
 import "moment-timezone";
+import BranchList from "./branchList";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import uuid from 'react-uuid'
+import { format } from 'date-fns';
 
 export default function InvoiceList() {
-  const [invoices, setInvoices] = useState([]);
+  const [invoices, setNotifications] = useState([]);
+  const [code, setCode] = useState("");
+  const [day, setDay] = useState("");
   const [startDate, setStartDate] = useState(new Date());
-  const [branch, setBranch] =  useState([])
-
-  function getData() {
-    fetch("http://127.0.0.1:8000/api/invoices")
-      .then((res) => res.json())
-      .then((res) => setInvoices(res.invoices));
-  }
-
-  function getBranch() {
-    fetch("http://127.0.0.1:8000/api/invoices-branch")
-      .then((res) => res.json())
-      .then((res) => setBranch(res.invoices));
-  }
-
-  useEffect(() => {
-    getData();
-    getBranch();
-  }, []);
-
-  const columns2 = [
-    {
-      key: "mcompcode",
-      text: "รหัสผู้แทน",
-    },
-    {
-      key: "mcustno",
-      text: "รหัสลูกค้า",
-    },
-    {
-      key: "mcustname",
-      text: "ชื่อลูกค้า",
-    },
-    {
-      key: "mnetamt",
-      text: "ยอดที่ต้องชำระ",
-    },
-     {
-      key: "actions",
-      text: "Actions",
-      align: "center",
-      cell: (customers) => {
-        return (
-          <Fragment>
-            <Link to={"/customers/view/" + customers.id} className="btn btn-info">
-              <i class="fas fa-eye"></i>
-            </Link>{" "}
-            <Link
-              to={"/customers/edit/" + customers.id}
-              className="btn btn-primary"
-            >
-              <i class="far fa-envelope"></i>
-            </Link>{" "}
-            {/* <button
-              // onClick={(event) => deleteStudnet(event, problems.id)}
-              onClick={()=>window.confirm('Are your sure you want to Delete ?')}
-              className="btn btn-danger btn-sm"
-            >
-              <i class="fas fa-trash"></i>
-            </button> */}
-          </Fragment>
-        );
-      },
-    },
-  ]
+  //const startDate = Moment(new Date()).format('YYYY-MM-DD')
+  const [stopDate, setStopDate] = useState(new Date());
 
   const columns = [
     {
-      key: "mcompcode",
+      dataField: "mcompcode",
       text: "รหัสผู้แทน",
     },
     {
-      key: "mcustno",
+      dataField: "mcustno",
       text: "รหัสลูกค้า",
-      align: "center",
     },
     {
-      key: "mcustname",
+      dataField: "mcustname",
       text: "ชื่อลูกค้า",
-      align: "center",
     },
     {
-      key: "mnetamt",
+      dataField: "outstanding",
       text: "ยอดหนี้",
     },
-    // {
-    //   key: '',
-    //   text: 'รีเบท'
-    // },
-    // {
-    //   key: '',
-    //   text: 'เงินเหลือ'
-    // },
-    // {
-    //   key: '',
-    //   text: "ลดหนี้",
-    //   align: "center",
-    // },
-    // {
-    //   key: '',
-    //   text: "เพิ่มหนี้",
-    //   align: "center",
-    // },
     {
-      key: "mnetamt",
-      text: "ยอดชำระ",
-      align: "center",
+      dataField: "outstanding",
+      text: "ยอดหนี้",
+    }, {
+      dataField: "outstanding",
+      text: "ยอดหนี้",
     },
     {
-      key: "mpostdate",
-      text: "วันที่เริ่ม",
-      cell: (invoices) => {
-        return (
-          <Fragment>
-            <Moment format="DD/MM/YYYY">{invoices.mpostdate}</Moment>
-          </Fragment>
-        );
+      dataField: "rebate",
+      text: "รีเบท",
+      formatter: (cellContent, row) => {
+        if (row.rebate) {
+          return <p>{row.rebate}</p>;
+        }
+        return <p>0</p>;
       },
     },
     {
-      key: "mdocdate",
-      text: "วันที่สิ้นสุด",
-      cell: (invoices) => {
-        return (
-          <Fragment>
-            <Moment format="DD/MM/YYYY">{invoices.mdocdate}</Moment>
-          </Fragment>
-        );
+      dataField: "balance",
+      text: "เงินเหลือ",
+      formatter: (cellContent, row) => {
+        if (row.balance) {
+          return <p>{row.balance}</p>;
+        }
+        return <p>0</p>;
       },
     },
     {
-      key: "mduedate",
+      dataField: "debit",
+      text: "ลดหนี้",
+      formatter: (cellContent, row) => {
+        if (row.debit) {
+          return <p>{row.debit}</p>;
+        }
+        return <p>0</p>;
+      },
+    },
+    {
+      dataField: "credit",
+      text: "ยอดที่ต้องชำระ",
+      formatter: (cellContent, row) => <p>{row.outstanding - row.debit}</p>,
+    },
+    {
+      dataField: "mday",
       text: "วันที่ต้องแจ้ง",
-      cell: (invoices) => {
-        return (
-          <Fragment>
-            <Moment format="DD/MM/YYYY">{invoices.mdocdate}</Moment>
-          </Fragment>
-        );
-      },
+    }, 
+    {
+      dataField: "actions",
+      text: "Actions",
+      formatter: actionButton,
     },
-    // {key: 'created_at',text: 'Create At',
-    // cell: (problems)=>{
-    //   return (
-    //     <Fragment>
-    //       <Moment format="DD/MM/YYYY">
-    //         {problems.createdAt}
-    //       </Moment>
-    //     </Fragment>
-    //   )
-    // }
-    // },
-    // {
-    //   key: "actions",
-    //   text: "Actions",
-    //   align: "center",
-    //   cell: (customers) => {
-    //     return (
-    //       <Fragment>
-    //         <Link to={"/customers/view/" + customers.id} className="btn btn-info btn-sm my-1">
-    //           <i class="fas fa-eye"></i>
-    //         </Link>{" "}
-    //         <Link
-    //           to={"/customers/edit/" + customers.id}
-    //           className="btn btn-primary btn-sm my-1"
-    //         >
-    //           <i class="fas fa-edit"></i>
-    //         </Link>{" "}
-    //         {/* <button
-    //           // onClick={(event) => deleteStudnet(event, problems.id)}
-    //           onClick={()=>window.confirm('Are your sure you want to Delete ?')}
-    //           className="btn btn-danger btn-sm"
-    //         >
-    //           <i class="fas fa-trash"></i>
-    //         </button> */}
-    //       </Fragment>
-    //     );
-    //   },
-    // },
   ];
 
-  const config = {
-    show_filter: true,
+  function getData() {
+    fetch("http://127.0.0.1:8000/api/notifications")
+      .then((res) => res.json())
+      .then((res) => setNotifications(res.notifications));
+  }
+
+  const searchDay = (key) => {
+    console.log(key)
+    fetch("http://127.0.0.1:8000/api/notifications-day?data="+ key)
+    .then((res) => res.json())
+    .then((res) => setNotifications(res.notifications));
+  }
+
+  const searchCode = (key) => {
+    console.log(key)
+    fetch("http://127.0.0.1:8000/api/notifications-code?data="+ key)
+    .then((res) => res.json())
+    .then((res) => setNotifications(res.notifications));
+  }
+
+  const searchStartDate = (key) => {
+    console.log(key)
+    fetch("http://127.0.0.1:8000/api/notifications-due-date?data="+ key)
+    .then((res) => res.json())
+    .then((res) => setNotifications(res.notifications));
+  }
+
+  useEffect(() => {
+    //getData();
+  }, []);
+
+  function actionButton(cell, row, rowIndex, formatExtraData) {
+    return (
+      <button
+        className="btn btn-primary"
+        onClick={() => alert("Sending Email!")}
+      >
+        SEND
+      </button>
+    );
+  }
+
+  const expandRow = {
+    renderer: (row) => (
+      <div align="center">
+        <BranchList row={row} />
+      </div>
+    ),
+    onlyOneExpanding: true,
+    showExpandColumn: true,
   };
 
   return (
@@ -200,7 +149,7 @@ export default function InvoiceList() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Invoice List</h1>
+                <h1>Invoice list</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -218,7 +167,7 @@ export default function InvoiceList() {
             <div className="col-md-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Calculate</h3>
+                  <h3 className="card-title">Invoice list</h3>
                   <div className="card-tools">
                     <button
                       type="button"
@@ -239,42 +188,67 @@ export default function InvoiceList() {
                   </div>
                 </div>
                 <div className="card-body">
-                  <ReactDatatable
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-3">
+                          <div className="group">
+                            <label htmlFor="">บริษัท</label>
+                            <select
+                              name={code}
+                              className="form-control"
+                              onChange={(event)=>searchCode(event.target.value)}
+                            >
+                              <option value="default">Please Select</option>
+                              <option value="0281">0281</option>
+                              <option value="0282">0282</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="col-md-3">
+                          <div className="group">
+                            <label htmlFor="">จากวันที่</label>
+                            <DatePicker
+                              className="form-control"
+                              selected={startDate}
+                              onChange={(date) => searchStartDate(date)}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-3">
+                          <div className="group">
+                            <label htmlFor="">ถึงวันที่</label>
+                            <DatePicker
+                              className="form-control"
+                              selected={stopDate}
+                              onChange={(date) => setStopDate(date)}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-3">
+                          <div className="group">
+                            <label htmlFor="">วันที่ต้องแจ้ง</label>
+                            <select 
+                              name={day} 
+                              className="form-control"
+                              onChange={(event)=>searchDay(event.target.value)}
+                              >
+                              <option value="default">Please Select</option>
+                              <option value="Monday">วันจันทร์</option>
+                              <option value="Thursday">วันพฤหัสบดี</option>
+                              <option value="Friday">วันศุกร์</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <BootstrapTable
+                    keyField='mcustno'
+                    data={invoices}
                     columns={columns}
-                    records={invoices}
-                    config={config}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Inbox</h3>
-                  <div className="card-tools">
-                    <button
-                      type="button"
-                      className="btn btn-tool"
-                      data-card-widget="collapse"
-                      title="Collapse"
-                    >
-                      <i className="fas fa-minus" />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-tool"
-                      data-card-widget="remove"
-                      title="Remove"
-                    >
-                      <i className="fas fa-times" />
-                    </button>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <ReactDatatable
-                    columns={columns2}
-                    records={branch}
-                    config={config}
+                    expandRow={expandRow}
+                    pagination={paginationFactory()}
                   />
                 </div>
               </div>

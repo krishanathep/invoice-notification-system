@@ -1,94 +1,92 @@
-import React, {useState,useEffect,Fragment} from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
-import ReactDatatable from "@ashvin27/react-datatable";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import Moment from "react-moment";
 import "moment-timezone";
 
 export default function CustomerList() {
-  
-  const [customers,setCustomers]=useState([])
+  const [customers, setCustomers] = useState([]);
 
   function getData() {
-    fetch('http://127.0.0.1:8000/api/customers')
-      .then((res)=>res.json())
-      .then((res)=>setCustomers(res.customers))
+    fetch("http://127.0.0.1:8000/api/customers")
+      .then((res) => res.json())
+      .then((res) => setCustomers(res.customers));
   }
 
-  useEffect(()=>{
-    getData()
-  },[])
+  useEffect(() => {
+    getData();
+  }, []);
 
   const columns = [
     {
-      key: "mcustno",
+      dataField: "mcustno",
       text: "Cus No",
+      filter: textFilter(),
     },
     {
-      key: "mcustname",
+      dataField: "mcustname",
       text: "Customer",
-      align: "center",
+      filter: textFilter(),
     },
     {
-      key: "maddress1",
+      dataField: "maddress1",
       text: "Address",
-      align: "center",
+      filter: textFilter(),
     },
     {
-      key: 'mfax',
-      text:'Fax'
+      dataField: "mfax",
+      text: "Fax",
+      filter: textFilter(),
+    },
+    {
+      dataField: 'mtel',
+      text: 'Phone',
+      filter: textFilter(),
+    },
+    {
+      dataField: "mmobile",
+      text: "Mobile",
+      filter: textFilter(),
+    },
+    {
+      dataField: "memail",
+      text: "Email",
+      filter: textFilter(),
     },
     // {
-    //   key: 'mtel',
-    //   text: 'Phone'
+    //   dataField: "created_at",
+    //   text: "Create At",
     // },
-    {
-      key: 'mmobile',
-      text: 'Mobile'
-    },
-    {
-      key: "memail",
-      text: "Email",
-      align: "center",
-    },
-    {key: 'created_at',text: 'Create At',
-    cell: (problems)=>{
-      return (
-        <Fragment>
-          <Moment format="DD/MM/YYYY">
-            {problems.createdAt}
-          </Moment>
-        </Fragment>
-      )
-    }
-    },
-    {
-      key: "actions",
-      text: "Actions",
-      align: "center",
-      cell: (customers) => {
-        return (
-          <Fragment>
-            <Link to={"/customers/view/" + customers.id} className="btn btn-info btn-sm my-1">
-              <i class="fas fa-eye"></i>
-            </Link>{" "}
-            <Link
-              to={"/customers/edit/" + customers.id}
-              className="btn btn-primary btn-sm my-1"
-            >
-              <i class="fas fa-edit"></i>
-            </Link>{" "} 
-            {/* <button
-              // onClick={(event) => deleteStudnet(event, problems.id)}
-              onClick={()=>window.confirm('Are your sure you want to Delete ?')}
-              className="btn btn-danger btn-sm"
-            >
-              <i class="fas fa-trash"></i>
-            </button> */}
-          </Fragment>
-        );
-      },
-    },
+    // {
+    //   dataField: "actions",
+    //   text: "Actions",
+    //   formatter: actionButton,
+    // },
   ];
+
+  function actionButton(cell, row, rowIndex, formatExtraData) {
+    return (
+      <>
+      <button
+        className="btn btn-info btn-sm"
+        onClick={() => alert('Edit Customer')}
+      >
+      <i class="fas fa-eye"></i>
+      </button>{' '}
+      <button
+        className="btn btn-primary btn-sm"
+        onClick={() => alert('View Customer')}
+      >
+      <i class="fas fa-edit"></i>
+      </button>
+      </>
+    );
+  };
+
   return (
     <>
       <div className="content-wrapper">
@@ -96,7 +94,7 @@ export default function CustomerList() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Customers List</h1>
+                <h1>Customers list</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -135,16 +133,12 @@ export default function CustomerList() {
                   </div>
                 </div>
                 <div className="card-body">
-                <Link
-                    to="/customers/create"
-                    className="btn btn-success float-right"
-                  >
-                    <i class="fas fa-plus-circle"></i> Customer
-                  </Link>
-                <ReactDatatable
+                  <BootstrapTable
+                    keyField="id"
+                    data={customers}
                     columns={columns}
-                    records={customers}
-                    //config={config}
+                    filter={filterFactory()}
+                    pagination={paginationFactory()}
                   />
                 </div>
               </div>

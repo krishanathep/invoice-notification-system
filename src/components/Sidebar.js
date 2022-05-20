@@ -60,16 +60,16 @@ export default function Sidebar() {
                   <p>Invoice</p>
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link to="/inbox/list" className="nav-link">
                   <i className="nav-icon far fa-envelope" />
                   <p>Inbox</p>
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link to="/customers/list" className="nav-link">
                   <i className="nav-icon fas fa-shopping-basket" />
-                  <p>Customers</p>
+                  <p>Customer</p>
                 </Link>
               </li>
               {/* <li className="nav-item">
