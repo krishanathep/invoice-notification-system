@@ -3,22 +3,31 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
-import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
-import Moment from "react-moment";
 import "moment-timezone";
 import BranchList from "./branchList";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import uuid from 'react-uuid'
-import { format } from 'date-fns';
+import ReactLoading from "react-loading";
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import "bootstrap-daterangepicker/daterangepicker.css";
+//import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 export default function InvoiceList() {
   const [invoices, setNotifications] = useState([]);
   const [code, setCode] = useState("");
   const [day, setDay] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  //const startDate = Moment(new Date()).format('YYYY-MM-DD')
-  const [stopDate, setStopDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const [state, setState] = useState();
+
+  const handleCallback = (start, stop) => {
+    setState({ start, stop });
+  };
+
+  const start = state?.start?.format("YYYY-MM-DD");
+  const stop = state?.stop?.format("YYYY-MM-DD");
+
+
 
   const columns = [
     {
@@ -34,13 +43,6 @@ export default function InvoiceList() {
       text: "ชื่อลูกค้า",
     },
     {
-      dataField: "outstanding",
-      text: "ยอดหนี้",
-    },
-    {
-      dataField: "outstanding",
-      text: "ยอดหนี้",
-    }, {
       dataField: "outstanding",
       text: "ยอดหนี้",
     },
@@ -82,7 +84,11 @@ export default function InvoiceList() {
     {
       dataField: "mday",
       text: "วันที่ต้องแจ้ง",
-    }, 
+    },
+    {
+      dataField: "mduedate",
+      text: "จากวันที่",
+    },
     {
       dataField: "actions",
       text: "Actions",
@@ -90,35 +96,62 @@ export default function InvoiceList() {
     },
   ];
 
-  function getData() {
-    fetch("http://127.0.0.1:8000/api/notifications")
+  async function getData() {
+    try {
+      setLoading(true)
+      await fetch("http://127.0.0.1:8000/api/notifications")
       .then((res) => res.json())
       .then((res) => setNotifications(res.notifications));
+    } catch(error) {
+      setError(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const searchDay = (key) => {
-    console.log(key)
-    fetch("http://127.0.0.1:8000/api/notifications-day?data="+ key)
-    .then((res) => res.json())
-    .then((res) => setNotifications(res.notifications));
+  async function searchDay(key) {
+    try {
+      setLoading(true);
+      await fetch("http://127.0.0.1:8000/api/notifications-day?data=" + key)
+        .then((res) => res.json())
+        .then((res) => setNotifications(res.notifications));
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const searchCode = (key) => {
-    console.log(key)
-    fetch("http://127.0.0.1:8000/api/notifications-code?data="+ key)
-    .then((res) => res.json())
-    .then((res) => setNotifications(res.notifications));
+  async function searchCode(key) {
+    try {
+      setLoading(true);
+      await fetch("http://127.0.0.1:8000/api/notifications-code?data=" + key)
+        .then((res) => res.json())
+        .then((res) => setNotifications(res.notifications));
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const searchStartDate = (key) => {
-    console.log(key)
-    fetch("http://127.0.0.1:8000/api/notifications-due-date?data="+ key)
-    .then((res) => res.json())
-    .then((res) => setNotifications(res.notifications));
+  async function searchStartDate() {
+  try {
+      setLoading(true);
+      await fetch(
+        `http://127.0.0.1:8000/api/notifications-due-date?start=${start}&stop=${stop}`
+      )
+        .then((res) => res.json())
+        .then((res) => setNotifications(res.notifications));
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    //getData();
+    getData();
   }, []);
 
   function actionButton(cell, row, rowIndex, formatExtraData) {
@@ -141,6 +174,39 @@ export default function InvoiceList() {
     onlyOneExpanding: true,
     showExpandColumn: true,
   };
+
+  if (loading === true) {
+    return (
+      <div className="content-wrapper">
+        <section className="content-header">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="loading mt-5" align="center">
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <ReactLoading
+                    //type="spokes"
+                    type='spin'
+                    color="#6495ED"
+                    height={"5%"}
+                    width={"5%"}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -197,7 +263,9 @@ export default function InvoiceList() {
                             <select
                               name={code}
                               className="form-control"
-                              onChange={(event)=>searchCode(event.target.value)}
+                              onChange={(event) =>
+                                searchCode(event.target.value)
+                              }
                             >
                               <option value="default">Please Select</option>
                               <option value="0281">0281</option>
@@ -205,34 +273,29 @@ export default function InvoiceList() {
                             </select>
                           </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-md-6">
                           <div className="group">
-                            <label htmlFor="">จากวันที่</label>
-                            <DatePicker
-                              className="form-control"
-                              selected={startDate}
-                              onChange={(date) => searchStartDate(date)}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="group">
-                            <label htmlFor="">ถึงวันที่</label>
-                            <DatePicker
-                              className="form-control"
-                              selected={stopDate}
-                              onChange={(date) => setStopDate(date)}
-                            />
+                            <label htmlFor="">
+                              จากวันที่เริ่ม - วันที่สิ้นสุด
+                            </label>
+                            <DateRangePicker
+                              onCallback={handleCallback}
+                              onApply={searchStartDate}
+                            >
+                              <input type="text" className="form-control" />
+                            </DateRangePicker>
                           </div>
                         </div>
                         <div className="col-md-3">
                           <div className="group">
                             <label htmlFor="">วันที่ต้องแจ้ง</label>
-                            <select 
-                              name={day} 
+                            <select
+                              name={day}
                               className="form-control"
-                              onChange={(event)=>searchDay(event.target.value)}
-                              >
+                              onChange={(event) =>
+                                searchDay(event.target.value)
+                              }
+                            >
                               <option value="default">Please Select</option>
                               <option value="Monday">วันจันทร์</option>
                               <option value="Thursday">วันพฤหัสบดี</option>
@@ -244,11 +307,12 @@ export default function InvoiceList() {
                     </div>
                   </div>
                   <BootstrapTable
-                    keyField='mcustno'
+                    keyField="mcustno"
                     data={invoices}
                     columns={columns}
                     expandRow={expandRow}
                     pagination={paginationFactory()}
+                    noDataIndication={ 'No Results Found!' }
                   />
                 </div>
               </div>

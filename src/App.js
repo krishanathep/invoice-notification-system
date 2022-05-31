@@ -16,7 +16,7 @@ import InvoiceList from "./pages/invoice/InvoiceList";
 import InvoiceCreate from "./pages/invoice/InvoiceCreate";
 import InvoiceView from "./pages/invoice/InvoiceView";
 import InvoiceEdit from "./pages/invoice/InvoiceEdit";
-import InvoiceReport from './components/report/invoice'
+import InvoiceReport from './pages/invoice/InvoiceReport'
 
 import CustomerList from "./pages/customers/CustomerList";
 import CustomerCreate from "./pages/customers/CustomerCreate";
@@ -43,7 +43,7 @@ function App() {
           <Route exact path="/invoice/create" element={<InvoiceCreate />} />
           <Route exact path="/invoice/view/:id" element={<InvoiceView />} />
           <Route exact path="/invoice/edit/:id" element={<InvoiceEdit />} />
-          <Route exact path="/invoice/report" element={<InvoiceReport />} />
+          <Route exact path="/invoice/report/:id" element={<InvoiceReport />} />
 
           <Route exact path="/customers/list" element={<CustomerList />} />
           <Route exact path="/customers/create" element={<CustomerCreate />} />
@@ -58,7 +58,9 @@ function App() {
           <Route path="/report" element={<AllReport />} />
           
         </Routes>
-        {window.location.pathname === "/" && "/invoice/report" ? null :  <Footer />}
+        {/* {window.location.pathname === "/" && "/invoice/report" ? null :  <Footer />} */}
+        {/* {window.location.pathname.includes('/signin','/invoice/report')  ? null :  <Footer />} */}
+
       </Router>
     </div>
   );

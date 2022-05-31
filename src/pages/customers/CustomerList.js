@@ -43,8 +43,8 @@ export default function CustomerList() {
       filter: textFilter(),
     },
     {
-      dataField: 'mtel',
-      text: 'Phone',
+      dataField: "mtel",
+      text: "Phone",
       filter: textFilter(),
     },
     {
@@ -71,21 +71,21 @@ export default function CustomerList() {
   function actionButton(cell, row, rowIndex, formatExtraData) {
     return (
       <>
-      <button
-        className="btn btn-info btn-sm"
-        onClick={() => alert('Edit Customer')}
-      >
-      <i class="fas fa-eye"></i>
-      </button>{' '}
-      <button
-        className="btn btn-primary btn-sm"
-        onClick={() => alert('View Customer')}
-      >
-      <i class="fas fa-edit"></i>
-      </button>
+        <button
+          className="btn btn-info btn-sm"
+          onClick={() => alert("Edit Customer")}
+        >
+          <i class="fas fa-eye"></i>
+        </button>{" "}
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => alert("View Customer")}
+        >
+          <i class="fas fa-edit"></i>
+        </button>
       </>
     );
-  };
+  }
 
   return (
     <>
@@ -133,6 +133,11 @@ export default function CustomerList() {
                   </div>
                 </div>
                 <div className="card-body">
+                  <div className="float-right">
+                    <Link className="btn btn-primary mb-2" to="/customers/create">
+                    <i class="fas fa-plus"></i> Customer
+                    </Link>
+                  </div>
                   <BootstrapTable
                     keyField="id"
                     data={customers}

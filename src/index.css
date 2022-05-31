@@ -10,7 +10,6 @@ code {
     monospace;
 }
 
-
 .loader {
   border: 16px solid #D4D4D4;
   border-radius: 50%;
@@ -31,4 +30,5 @@ code {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
 

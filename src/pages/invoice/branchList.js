@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Moment from "react-moment";
-import "moment-timezone";
+import { Link,useParams } from "react-router-dom";
 
 export default function BranchList({ row }) {
   const [branch, setBranch] = useState([]);
-
+  const { id } = useParams();
   function getData() {
-    fetch("http://127.0.0.1:8000/api/branch?data=" + row.mcustno_sendto)
+    fetch("http://127.0.0.1:8000/api/billdetails?data=" + id)
       .then((res) => res.json())
-      .then((res) => setBranch(res.branch));
+      .then((res) => setBranch(res.bills));
   }
 
   useEffect(() => {
-    //getData();
+    getData(id);
   }, []);
+
+  function refreshPage() {
+    setTimeout(()=>{
+        window.location.reload(false);
+    }, 500);
+    console.log('page to reload')
+}
+
+function showDetail(){
+  fetch("http://127.0.0.1:8000/api/billdetails?data="+row.mcustno)
+      .then((res) => res.json())
+      .then((res) => setBranch(res.bills));
+}
 
   return (
     <div>
@@ -29,15 +40,16 @@ export default function BranchList({ row }) {
         </tr>
         <tr>
           <td>1</td>
-          <td>2022-07-05</td>
-          <td>0002000676</td>
-          <td>บมจ.โฮม โปรดักส์ เซ็นเตอร์</td>
-          <td>11910.04</td>
+          <td>2022-05-30</td>
+          <td>0002000097</td>
+          <td>บจ.สยาม อินเตอร์ ฮาร์ดแวร์</td>
+          <td>10195.99</td>
           <td>
             <button
               data-toggle="modal"
               data-target="#myModal"
               className="btn btn-info"
+              onClick={showDetail}
             >
               VIEW
             </button>
@@ -65,98 +77,21 @@ export default function BranchList({ row }) {
                   <th>ยอดหนี้</th>
                   <th>หมายเหตุ</th>
                 </tr>
-                <tr>
-                  <td>1</td>
-                  <td>RT</td>
-                  <td>0164884841</td>
-                  <td>2022-5-11</td>
-                  <td>161334.60</td>
+               {branch.map((b,i)=>(
+                  <tr>
+                  <td>{i+1}</td>
+                  <td>{b.mdoctype}</td>
+                  <td>{b.macctdoc}</td>
+                  <td>{b.mdocdate}</td>
+                  <td>{b.mnetamt}</td>
                   <td align="center">*</td>
                 </tr>
-                <tr>
-                  <td>2</td>
-                  <td>RT</td>
-                  <td>0164884842</td>
-                  <td>2022-5-11</td>
-                  <td>65902.52</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>RT</td>
-                  <td>0164884843</td>
-                  <td>2022-5-11</td>
-                  <td>129315</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>RT</td>
-                  <td>0164884844</td>
-                  <td>2022-5-11</td>
-                  <td>268031.15</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>RT</td>
-                  <td>0164884845</td>
-                  <td>2022-5-11</td>
-                  <td>74750.74</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>RT</td>
-                  <td>0164884846</td>
-                  <td>2022-5-11</td>
-                  <td>3389.69</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>RT</td>
-                  <td>0164884847</td>
-                  <td>2022-5-11</td>
-                  <td>124894.123</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>RT</td>
-                  <td>0164884848</td>
-                  <td>2022-5-11</td>
-                  <td>191.32</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>RT</td>
-                  <td>0164884849</td>
-                  <td>2022-5-11</td>
-                  <td>3389.69</td>
-                  <td align="center">*</td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>RT</td>
-                  <td>0164884850</td>
-                  <td>2022-5-11</td>
-                  <td>24324</td>
-                  <td align="center">*</td>
-                </tr>
+               ))}
               </table>
             </div>
 
             <div class="modal-footer">
-              <button
-                onClick={()=>window.location.href = "/invoice/report"}
-                type="button"
-                class="btn btn-primary"
-                data-dismiss="modal"
-              >
-                Print
-              </button>
+              <Link to={'/invoice/report/'+row.mcustno} onClick={refreshPage} className="btn btn-primary">Print</Link>
               <button
                 type="button"
                 class="btn btn-secondary"

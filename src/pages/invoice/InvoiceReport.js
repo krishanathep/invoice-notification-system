@@ -1,8 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import ReactToPrint from "react-to-print";
+import BootstrapTable from "react-bootstrap-table-next";
 
-function componentToPrint() {
+export default function InvoiceReport() {
+  const { id } = useParams();
+  const [bills, setBills] = useState([]);
+
+  function getData() {
+    fetch("http://127.0.0.1:8000/api/billdetails?data=" + id)
+      .then((res) => res.json())
+      .then((res) => setBills(res.bills));
+  }
+
+  useEffect(() => {
+    getData(id);
+  }, []);
+
   return (
-    <section classname="content">
+    <div className="content-wrapper">
+      <section className="content-header">
+        <div className="container-fluid">
+          <div className="row mb-2">
+            <div className="col-sm-6">
+              <h1>Invoice report</h1>
+            </div>
+            <div className="col-sm-6">
+              <ol className="breadcrumb float-sm-right">
+                <li className="breadcrumb-item">
+                  <Link to="/">Home</Link>
+                </li>
+                <li className="breadcrumb-item active">Invoice report</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+      <ReactToPrint />
+      <section classname="content">
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
@@ -16,23 +51,22 @@ function componentToPrint() {
               <div className="invoice p-3 mb-3">
                 <div className="row">
                   <div className="col-12">
-                    <h4> 
-                      <i className="fas fa-globe" /> AdminLTE, Inc.
-                      <small className="float-right">Date: 2/10/2014</small>
-                    </h4>
+                    <h3 className="mb-5 mt-5" align="center">
+                      ใบแจ้งเตือนลูกค้าที่ครบกำหนดชำระค่าสินค้า
+                    </h3>
                   </div>
                 </div>
                 <div className="row invoice-info">
                   <div className="col-sm-4 invoice-col">
                     From
                     <address>
-                      <strong>Admin, Inc.</strong>
+                      <strong>NAWA PLASTIC Industries Co.,Ltd.</strong>
+                      {/* <br />
+                      เลขที่ 1  ถ.ปูนซิเมนต์ไทย บางซื่อ
                       <br />
-                      795 Folsom Ave, Suite 600
+                      กทม. 10800 */}
                       <br />
-                      San Francisco, CA 94107
-                      <br />
-                      Phone: (804) 123-5432
+                      Phone: +66 2555 0333
                       <br />
                       Email:{" "}
                       <a
@@ -47,11 +81,11 @@ function componentToPrint() {
                   <div className="col-sm-4 invoice-col">
                     To
                     <address>
-                      <strong>John Doe</strong>
-                      <br />
+                      <strong>บจ.สยาม อินเตอร์ ฮาร์ดแวร์</strong>
+                      {/* <br />
                       795 Folsom Ave, Suite 600
                       <br />
-                      San Francisco, CA 94107
+                      San Francisco, CA 94107 */}
                       <br />
                       Phone: (555) 539-1037
                       <br />
@@ -66,70 +100,47 @@ function componentToPrint() {
                     </address>
                   </div>
                   <div className="col-sm-4 invoice-col">
+                    <p></p>
                     <b>Invoice #007612</b>
-                    <br />
                     <br />
                     <b>Order ID:</b> 4F3S8J
                     <br />
                     <b>Payment Due:</b> 2/22/2014
-                    <br />
-                    <b>Account:</b> 968-34567
+                    {/* <br />
+                    <b>Account:</b> 968-34567 */}
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-12 table-responsive">
-                    <table className="table table-striped">
+                    <table className="table">
                       <thead>
                         <tr>
-                          <th>Qty</th>
-                          <th>Product</th>
-                          <th>Serial #</th>
-                          <th>Description</th>
-                          <th>Subtotal</th>
+                          <th>ลำดับที่</th>
+                          <th>กำหนดชำระ</th>
+                          <th>เงื่อนไขขาย</th>
+                          <th>ใบแจ้งหนี้</th>
+                          <th>มูลค่า บาท</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Call of Duty</td>
-                          <td>455-981-221</td>
-                          <td>
-                            El snort testosterone trophy driving gloves handsome
-                          </td>
-                          <td>$64.50</td>
-                        </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>Need for Speed IV</td>
-                          <td>247-925-726</td>
-                          <td>Wes Anderson umami biodiesel</td>
-                          <td>$50.00</td>
-                        </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>Monsters DVD</td>
-                          <td>735-845-642</td>
-                          <td>
-                            Terry Richardson helvetica tousled street art master
-                          </td>
-                          <td>$10.70</td>
-                        </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>Grown Ups Blue Ray</td>
-                          <td>422-568-642</td>
-                          <td>Tousled lomo letterpress</td>
-                          <td>$25.99</td>
-                        </tr>
+                        {bills.map((bill,i)=>(
+                            <tr key={i}>
+                            <td>{i+1}</td>
+                            <td>{bill.mdocdate}</td>
+                            <td>{bill.mpayterm}</td>
+                            <td>{bill.macctdoc}</td>
+                            <td>{bill.mnetamt}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-6">
-                    <p className="lead">Payment Methods:</p>
+                    <p className="lead">ท่านสามารถโอนเงินชำระค่าสินค่าได้ดังนี้</p>
                     
-                    <img src={process.env.PUBLIC_URL + "/assets/dist/img/credit/visa.png" } alt="Visa" />{' '}
+                    {/* <img src={process.env.PUBLIC_URL + "/assets/dist/img/credit/visa.png" } alt="Visa" />{' '}
                     <img
                       src={process.env.PUBLIC_URL +"/assets/dist/img/credit/mastercard.png" }
                       alt="Mastercard"/>{' '}
@@ -137,18 +148,39 @@ function componentToPrint() {
                       src={process.env.PUBLIC_URL + "/assets/dist/img/credit/american-express.png" }
                       alt="American Express"
                     />{' '}
-                    <img src={process.env.PUBLIC_URL +"/assets/dist/img/credit/paypal2.png" } alt="Paypal" />
+                    <img src={process.env.PUBLIC_URL +"/assets/dist/img/credit/paypal2.png" } alt="Paypal" /> */}
                     <p
                       className="text-muted well well-sm shadow-none"
                       style={{ marginTop: 10 }}
                     >
-                      Etsy doostang zoodles disqus groupon greplin oooj voxy
-                      zoodles, weebly ning heekya handango imeem plugg dopplr
-                      jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                    </p>
+                      1. แจ้งการชำระเงินผ่านธนาคาร(PAY-IN SLIP)ตามบบฟอร์มของบริษัท<br/>
+                      2. โอนผ่านบัญชีกระแสรายวัน(ใช้ Payin ธนาคาร) หรือ โอนผ่านอินเตอร์เน็ต<br/><br/>
+                      <table width='100%'>
+                        <tr>
+                          <td>ธนาคารกสิกรไทย</td>
+                          <td>สาขาบางซื่อ</td>
+                          <td>020-1-06142-3</td>
+                        </tr>
+                        <tr>
+                          <td>ธนาคารไทยพาณิชย์</td>
+                          <td>สาขาบางโพ</td>
+                          <td>027-3-02206-9</td>
+                        </tr>
+                        <tr>
+                          <td>ธนาคารกรุงเทพ</td>
+                          <td>สาขาซอยอารี</td>
+                          <td>127-3-10643-3</td>
+                        </tr>
+                        <tr>
+                          <td>ธนาคารกรุงไทย</td>
+                          <td>สาขาประดิพัทธ์</td>
+                          <td>034-6-10197-4</td>
+                        </tr>
+                      </table>
+                    </p> 
                   </div>
                   <div className="col-6">
-                    <p className="lead">Amount Due 2/22/2014</p>
+                    <p className="lead">มูลค่ารวมทั้งสิ้น</p>
                     <div className="table-responsive">
                       <table className="table">
                         <tbody>
@@ -156,14 +188,14 @@ function componentToPrint() {
                             <th style={{ width: "50%" }}>Subtotal:</th>
                             <td>$250.30</td>
                           </tr>
-                          <tr>
+                          {/* <tr>
                             <th>Tax (9.3%)</th>
                             <td>$10.34</td>
                           </tr>
                           <tr>
                             <th>Shipping:</th>
                             <td>$5.80</td>
-                          </tr>
+                          </tr> */}
                           <tr>
                             <th>Total:</th>
                             <td>$265.24</td>
@@ -183,8 +215,11 @@ function componentToPrint() {
                     >
                       <i className="fas fa-print" /> Print
                     </a> */}
-                    <button onClick={()=>window.print()} className='btn btn-default  float-right'>
-                    <i className="fas fa-print" /> Print & PDF
+                    <button
+                      onClick={() => window.print()}
+                      className="btn btn-default  float-right"
+                    >
+                      <i className="fas fa-print" /> Print & PDF
                     </button>
                     {/* <button
                       type="button"
@@ -206,7 +241,6 @@ function componentToPrint() {
           </div>
         </div>
       </section>
-  )
+    </div>
+  );
 }
-
-export default componentToPrint
