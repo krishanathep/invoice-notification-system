@@ -11,7 +11,7 @@ import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 //import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-export default function InvoiceList() {
+export default function InvoiceList({row}) {
   const [invoices, setNotifications] = useState([]);
   const [code, setCode] = useState("");
   const [day, setDay] = useState("");
@@ -30,8 +30,12 @@ export default function InvoiceList() {
 
 
   const columns = [
+    // {
+    //   dataField: "mcompcode",
+    //   text: "รหัสผู้แทน",
+    // },
     {
-      dataField: "mcompcode",
+      dataField: "business",
       text: "รหัสผู้แทน",
     },
     {
@@ -81,10 +85,10 @@ export default function InvoiceList() {
       text: "ยอดที่ต้องชำระ",
       formatter: (cellContent, row) => <p>{row.outstanding - row.debit}</p>,
     },
-    {
-      dataField: "mday",
-      text: "วันที่ต้องแจ้ง",
-    },
+    // {
+    //   dataField: "mday",
+    //   text: "วันที่ต้องแจ้ง",
+    // },
     {
       dataField: "mduedate",
       text: "จากวันที่",
@@ -155,10 +159,19 @@ export default function InvoiceList() {
   }, []);
 
   function actionButton(cell, row, rowIndex, formatExtraData) {
+
+    const sendMail = () => {
+      fetch('http://127.0.0.1:8000/api/email')
+        .then((res)=>res.json())
+        .then((res)=>{
+          alert(res.message+' '+'to'+' '+row.mcustname)
+        })
+    }
+
     return (
       <button
         className="btn btn-primary"
-        onClick={() => alert("Sending Email!")}
+        onClick={sendMail}
       >
         SEND
       </button>

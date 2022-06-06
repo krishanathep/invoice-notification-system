@@ -1,14 +1,56 @@
 import React, { useState, useEffect } from "react";
 import { Link,useParams } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
 
 export default function BranchList({ row }) {
   const [branch, setBranch] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null)
   const { id } = useParams();
-  function getData() {
-    fetch("http://127.0.0.1:8000/api/billdetails?data=" + id)
+
+  const columns = [
+    {
+      dataField: "mdoctype",
+      text: "ชนิดบิล",
+    },
+    {
+      dataField: "macctdoc",
+      text: "เลขที่บิล",
+    },
+    {
+      dataField: "mdocdate",
+      text: "วันที่ต้องชำระบิล",
+    },
+    {
+      dataField: "mnetamt",
+      text: "ยอดหนี้",
+    },
+    {
+      dataField: "remark",
+      text: "หมายเหตุ",
+      formatter: (cellContent, row) => (
+        <p align='center'>*</p>
+      )
+    },
+  ]
+
+ async function getData() {
+    try {
+      setLoading(true)
+     await fetch("http://127.0.0.1:8000/api/branch?data=" + row.mcustno)
       .then((res) => res.json())
-      .then((res) => setBranch(res.bills));
+      .then((res) => setBranch(res.branch));
+    }catch (error) {
+      setError(error)
+    }finally {
+      setLoading(false)
+    }
   }
+
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true
+  };
 
   useEffect(() => {
     getData(id);
@@ -27,6 +69,11 @@ function showDetail(){
       .then((res) => setBranch(res.bills));
 }
 
+if (loading === true) {
+  return (
+      <p>Loading...</p>
+    )
+  }
   return (
     <div>
       <table className="table-boardered">
@@ -38,12 +85,13 @@ function showDetail(){
           <th>ยอดค้างชำระ</th>
           <th>Actions</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>2022-05-30</td>
-          <td>0002000097</td>
-          <td>บจ.สยาม อินเตอร์ ฮาร์ดแวร์</td>
-          <td>10195.99</td>
+        {branch.map((b, i)=>(
+          <tr>
+          <td>{ i+1 }</td>
+          <td>{ b.mduedate }</td>
+          <td>{ b.mcustno }</td>
+          <td>{ b.mcustname }</td>
+          <td>{ b.outstanding }</td>
           <td>
             <button
               data-toggle="modal"
@@ -55,6 +103,7 @@ function showDetail(){
             </button>
           </td>
         </tr>
+        ))}
       </table>
 
       <div class="modal fade" id="myModal">
@@ -68,7 +117,13 @@ function showDetail(){
             </div>
 
             <div class="modal-body">
-              <table className="table-boardered">
+            <BootstrapTable
+                    keyField="macctdoc"
+                    data={branch}
+                    columns={columns}
+                    selectRow={ selectRow }
+                  />
+              {/* <table className="table-boardered">
                 <tr>
                   <th>ลำดับ</th>
                   <th>ชนิดบิล</th>
@@ -87,7 +142,7 @@ function showDetail(){
                   <td align="center">*</td>
                 </tr>
                ))}
-              </table>
+              </table> */}
             </div>
 
             <div class="modal-footer">

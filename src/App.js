@@ -13,10 +13,8 @@ import SignUp from "./pages/login/SiginUp";
 import AllReport from "./pages/report/AllReport";
 
 import InvoiceList from "./pages/invoice/InvoiceList";
-import InvoiceCreate from "./pages/invoice/InvoiceCreate";
-import InvoiceView from "./pages/invoice/InvoiceView";
-import InvoiceEdit from "./pages/invoice/InvoiceEdit";
 import InvoiceReport from './pages/invoice/InvoiceReport'
+import InvoiceDetail from './pages/invoice/invoiceDetail'
 
 import CustomerList from "./pages/customers/CustomerList";
 import CustomerCreate from "./pages/customers/CustomerCreate";
@@ -29,6 +27,12 @@ import UserView from "./pages/users/UserView";
 import TableExample from "./pages/TableExaple";
 
 function App() {
+  const token = localStorage.getItem('access_token')
+
+  if(!token) {
+    return <SignIn/>
+  }
+
   return (
     <div className="wrapper">
       <Router>
@@ -40,10 +44,8 @@ function App() {
           <Route exact path="/home" element={<Home />} />
 
           <Route exact path="/invoice/list" element={<InvoiceList />} />
-          <Route exact path="/invoice/create" element={<InvoiceCreate />} />
-          <Route exact path="/invoice/view/:id" element={<InvoiceView />} />
-          <Route exact path="/invoice/edit/:id" element={<InvoiceEdit />} />
           <Route exact path="/invoice/report/:id" element={<InvoiceReport />} />
+          <Route exact path="/invoice/detail/:id" element={<InvoiceDetail/> } />
 
           <Route exact path="/customers/list" element={<CustomerList />} />
           <Route exact path="/customers/create" element={<CustomerCreate />} />
